@@ -37,7 +37,8 @@
 
  1. The following function will allow you to capture an image from the video feed:
 
-    ```/**
+    ```
+    /**
      * Capture an image from the video element and return it as a DataURL
      * 
      * @param video HTMLElement Video HTML Element
@@ -53,7 +54,8 @@
     	document.getElementById('div-image').appendChild(canvas);
 
     	return canvas.toDataURL('image/jpeg');
-    }```
+    }
+    ```
 
 
 ## Using Amazon Rekognition to search for faces
@@ -65,7 +67,8 @@
  
  The SearchFacesByImage can receive a blob or an arraybuffer as an input for the image (it can also receive an object stored in a S3 bucket):
  
-    ```/**
+    ```
+    /**
      * Transform a dataURL (base64 encoded image) to a blob
      * 
      * @param string data Base64 encoded string of an image
@@ -82,4 +85,5 @@
       	}
 
     	return ab;
-    }```
+    }
+    ```
