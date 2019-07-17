@@ -74,12 +74,12 @@ if (navigator.mediaDevices.getUserMedia) {
  
 ```javascript
     /**
-     * Transform a dataURL (base64 encoded image) to a blob
+     * Transform a dataURI (base64 encoded image) to a blob
      * 
      * @param string data Base64 encoded string of an image
      * @return ArrayBuffer ArrayBuffer containing the image
      */
-    function imgToBlob(data) {
+    function dataURItoBlob(data) {
     	var base64Image = data.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
     	var binaryImg = atob(base64Image);
       	var length = binaryImg.length;
@@ -92,3 +92,48 @@ if (navigator.mediaDevices.getUserMedia) {
     	return ab;
     }
 ```
+
+Here is a snippet of code on how to invoke Rekognition and do a searchByFace.
+
+```javascript
+var collectionId = "my-aws-rekognition-collection-id";
+var imageData = captureImage(video);
+var imageBlob = dataURItoBlob(imageData);
+
+// Send it to Rekognition now
+var params = {
+    CollectionId: collectionId, 
+    FaceMatchThreshold: 90, 
+    Image: {
+        Bytes: imageBlob
+    }, 
+    MaxFaces: 5
+};
+
+var rekognition = new AWS.Rekognition();
+
+var response = rekognition.searchFacesByImage(params, function(err, data) {
+    if (err) {
+        console.log(err); // an error occurred
+        ctx.worldData.detectionInProgress = false;	
+        ctx.transitions.failure();
+        
+    }
+    // successful response
+    else {
+        console.log(data);       	
+        if (data.FaceMatches.length == 0) {
+            // We didnt find anyone matching in Rekogniton 
+            ctx.worldData.detectionInProgress = false;		
+            console.log("Couldnt find any face for this person in Rekognition");
+            ctx.transitions.failure();
+        } else {
+            // We found someone
+            var externalImageId = data.FaceMatches[0].Face.ExternalImageId.toLowerCase();
+            
+            console.log(externalImageId);
+            ctx.worldData.externalImageId = externalImageId;
+            ctx.transitions.success();
+        }
+    }
+});```
