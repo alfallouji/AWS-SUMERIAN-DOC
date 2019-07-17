@@ -10,25 +10,30 @@
  3. Connect your webcam stream to the video element via Javascript.
     - Add a custom JS script to your HTML 3D entity
     - Edit the JS script that was created, you will need to implement the following code in the `setup()` function
-        ```
-        var video = document.querySelector("#video");
-    	if (navigator.mediaDevices.getUserMedia) {       
-    		navigator.mediaDevices.getUserMedia({video: true})
-    	  	.then(function(stream) {
-    			console.log('Attaching video stream to the video element');
-    			video.srcObject = stream;
-    	  	})
-    	  	.catch(function(error) {
-    			console.log("Couldn't attach the video stream. Caught following error", error);
-    	  	});
-    	}```
+```javascript
+var video = document.querySelector("#video");
+if (navigator.mediaDevices.getUserMedia) {       
+     navigator.mediaDevices.getUserMedia({video: true})
+     .then(function(stream) {
+          console.log('Attaching video stream to the video element');
+          video.srcObject = stream;
+     })
+     .catch(function(error) {
+          console.log("Couldn't attach the video stream. Caught following error", error);
+     });
+}
+```
 
         If you have multiple webcams connected, you may need to pass a specific deviceId.
 
-        ```navigator.mediaDevices.getUserMedia({video: true, deviceId: { exact: camera.deviceId }})```
+```javascript
+     navigator.mediaDevices.getUserMedia({video: true, deviceId: { exact: camera.deviceId }})
+```
 
         In order to find out what deviceId to use, you can use the following:
-        ```navigator.mediaDevices.enumerateDevices()```
+```javascript
+     navigator.mediaDevices.enumerateDevices()
+```
 
  You are ready to test your scene and see if you can view the webcam.
 
@@ -37,7 +42,7 @@
 
  1. The following function will allow you to capture an image from the video feed:
 
-    ```
+```javascript
     /**
      * Capture an image from the video element and return it as a DataURL
      * 
@@ -55,7 +60,7 @@
 
     	return canvas.toDataURL('image/jpeg');
     }
-    ```
+```
 
 
 ## Using Amazon Rekognition to search for faces
@@ -67,7 +72,7 @@
  
  The SearchFacesByImage can receive a blob or an arraybuffer as an input for the image (it can also receive an object stored in a S3 bucket):
  
-    ```
+```javascript
     /**
      * Transform a dataURL (base64 encoded image) to a blob
      * 
@@ -86,4 +91,4 @@
 
     	return ab;
     }
-    ```
+```
