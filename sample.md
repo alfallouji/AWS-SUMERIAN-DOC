@@ -29,7 +29,7 @@
       }
 
   const net = await posenet.load();
-
+  var image = captureImage(video);
   const pose = await net.estimateSinglePose(image, {
     flipHorizontal: false
   });
